@@ -1,7 +1,8 @@
 class Enemy{
     elm;
     x;
-    xSpeed=5+Math.random()*2;
+    xSpeed=3+Math.random()*2;
+    walking=true;
     constructor(x){
         this.x=x;
         this.elm=document.createElement('div');
