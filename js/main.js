@@ -344,7 +344,7 @@ function actionEnd(){
     btnRestart.addEventListener('mouseenter',()=>btnRestart.style.opacity='0.8')
     btnRestart.addEventListener('mouseleave',()=>btnRestart.style.opacity='1')
     btnRestart.addEventListener('click',()=>{
-        window.location.href = "http://127.0.0.1:8080/";
+        window.location.href = "https://vishwa-dinath.github.io/minigame/";
 
     });
 }
