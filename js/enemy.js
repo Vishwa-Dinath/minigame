@@ -2,8 +2,11 @@ class Enemy{
     elm;
     x;
     xSpeed=3+Math.random()*2;
+    image;
     walking=true;
-    constructor(x){
+    die = false;
+    constructor(x,image){
+        this.image=image;
         this.x=x;
         this.elm=document.createElement('div');
         this.elm.classList.add('enemy');
@@ -14,6 +17,9 @@ class Enemy{
         this.x += this.xSpeed;
         if (this.x>=innerWidth) this.x=0;
         this.elm.style.right=`${this.x}px`;
+    }
+    eliminate(){
+        document.body.removeChild(this.elm)
     }
 }
 

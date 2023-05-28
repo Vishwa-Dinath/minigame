@@ -2,6 +2,7 @@ class FireBall{
     elm;
     x;
     xSpeed=5;
+    dissapear=false;
     constructor(x){
         this.x=x;
         this.elm=document.createElement("div");

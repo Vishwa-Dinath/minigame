@@ -13,31 +13,38 @@ let jump = false;
 let run = false;
 let die = false;
 let dx = 0;
+let score = 0;
 
-document.body.addEventListener('keydown', (eventData)=> {
-    if (eventData.code === 'Space'){
-        jump = (!die)?true:false;  
-    }else if (eventData.code === 'ArrowRight'){
-        run = (!die)?true:false;
-        if(!die)boy.style.transform='scaleX(1)';
-        dx = 2;
-    }else if (eventData.code === 'ArrowLeft'){
-        run = (!die)?true:false;
-        console.log("turned");
-        if(!die) boy.style.transform='scaleX(-1)';
-        dx = -2;
-    }
-});
+function gameStart(){
+    document.body.addEventListener('keydown', (eventData)=> {
+        if (eventData.code === 'Space'){
+            jump = (!die)?true:false;  
+        }else if (eventData.code === 'ArrowRight'){
+            run = (!die)?true:false;
+            if(!die)boy.style.transform='scaleX(1)';
+            dx = 2;
+        }else if (eventData.code === 'ArrowLeft'){
+            run = (!die)?true:false;
+            console.log("turned");
+            if(!die) boy.style.transform='scaleX(-1)';
+            dx = -2;
+        }
+    });
+    
+    document.body.addEventListener('keyup', (eventData) => {
+        if (eventData.code === 'ArrowRight'){ 
+            run = false;
+            dx = 0;
+        }else if (eventData.code === 'ArrowLeft'){
+            run = false;
+            dx = 0;
+        }
+    });
 
-document.body.addEventListener('keyup', (eventData) => {
-    if (eventData.code === 'ArrowRight'){ 
-        run = false;
-        dx = 0;
-    }else if (eventData.code === 'ArrowLeft'){
-        run = false;
-        dx = 0;
-    }
-});
+    setEnemyWalk();
+    setTimeout(()=>enableAttacking(),100)
+    
+}
 
 let angle = 0;
 function doJump(){
@@ -51,22 +58,13 @@ function doJump(){
     }
 }
 
-// function doRun(){
-//     let x = boxElm.offsetLeft + dx;
-//     if ((x + boxElm.offsetWidth)> innerWidth) {
-//         x = innerWidth - boxElm.offsetWidth;
-//     }else if (x <= 0) x = 0;
-//     boxElm.style.left = `${x}px`;
-// }
-let y =0;
+let y =1;
 function doRun(){
     let x = boy.offsetLeft + dx;
-    if ((x)> innerWidth) {
+    if ((x)>= innerWidth) {
         x = 0;
         y++;
-        if (y<4){
-            bodyElm.style.backgroundImage=`url("../img/background${y+1}.jpg ")`;
-        } 
+        setBackground(y)
     }else if (x <= 0) x = 0;
     boy.style.left = `${x}px`;
 }
@@ -149,46 +147,139 @@ birds.forEach(each=>{
 
 /*  Creating Enemy */
 
-// let enemyWalk = true;
-
 const enemies = [];
-enemies.push(new Enemy(0));
-enemies.push(new Enemy(-300));
-enemies.push(new Enemy(-600));
+enemies.push(new Enemy(0,1));
+enemies.push(new Enemy(-300,2));
+enemies.push(new Enemy(-600,3));
 
 let m=1;
-function enemyDrawWalk(element,i){
-    element.elm.style.backgroundImage=`url('../img/Zombie${i}/Walk${m++}.png')`;
+function enemyDrawWalk(element){
+    element.elm.style.backgroundImage=`url('../img/Zombie${element.image}/Walk${m++}.png')`;
     if (m===6) m=1;
 }
 
-for(let i=0;i<enemies.length;i++){
-    setInterval(()=>{
-        if (!die && innerWidth-enemies[i].x <= boy.offsetLeft+boy.offsetWidth && boy.offsetTop>=innerHeight-300){
-            boyDie();
-        };
-        if (enemies[i].walking) enemies[i].walk();
-        
-    },20);
-    setInterval(()=>{
-        if (enemies[i].walking) enemyDrawWalk(enemies[i],i+1)
-    },1000/8);
+function setEnemyWalk(){
+    for(let i=0;i<enemies.length;i++){
+        setInterval(()=>{
+            if (innerWidth-enemies[i].x <= boy.offsetLeft+boy.offsetWidth && boy.offsetTop>=innerHeight-300){
+                boyDie();
+            };
+            if (enemies[i].walking) enemies[i].walk();
+            
+        },20);
+        setInterval(()=>{
+            if(!enemies[i].die)enemyDrawWalk(enemies[i]);
+        },1000/8);
+    }
 }
 
+
+let z=1;
+function drawEnemyDie(enemy){
+    enemy.elm.style.backgroundImage =`url('../img/Zombie${enemy.image}/Dead${z++}.png')`;
+    if (z===8) z=6;
+}
+
+
 /*  Creating fire balls */
-document.body.addEventListener('click',()=>{
-    let b1= new FireBall(boy.offsetLeft+boy.offsetWidth);
-    setInterval(()=>{
-        b1.shoot();
-    },5);
-})
+const fireBalls = [];
+function enableAttacking(){
+    document.body.addEventListener('click',()=>{
+        let b1= new FireBall(boy.offsetLeft+boy.offsetWidth);
+        fireBalls.push(b1);
+        setInterval(()=>{
+            b1.shoot();
+        },5);
+    })
+}
 
 function boyDie(){
     die = true;
     jump = false;
     run = false;
+    enemies.forEach(each=>each.elm.style.visibility='hidden');
+    document.body.removeEventListener('click');
 }
+
+setInterval(()=>{
+    attack();
+},10)
 
 function attack(){
+    for(let r=0; r<fireBalls.length;r++){
+        for (let q=0; q<enemies.length; q++){
+            if (fireBalls[r].x >= innerWidth - enemies[q].x-100){
+                if (!fireBalls[r].dissapear){
+                    fireBalls[r].dissapear=true;
+                    document.body.removeChild(fireBalls[r].elm);
+                    // enemies[q].x=-800;
+                    enemies[q].die = true;
+                    enemyDie(enemies[q]);
+                    enemies[q].xSpeed = 0;
+                    setTimeout(()=>{
+                        enemies[q].x=-800;
+                        enemies[q].die=false;
+                        enemies[q].xSpeed=3+Math.random()*2;
+                    },500)
 
+                }
+                
+            }
+        }
+    }
+    
 }
+let dieInt = null;
+function enemyDie(enemy){
+    dieInt = setInterval(()=>{
+        if (enemy.die) drawEnemyDie(enemy);
+    },100)
+}
+
+/* Design Surrounding */
+const board = document.createElement('div');
+board.classList.add('start');
+document.body.append(board);
+board.innerText='Start'
+
+function setBackground(y){
+    if (y===6) gameOver();
+    if (y==5) {
+        board.style.backgroundImage="url('../img/other/end-board.png'";
+        bodyElm.style.backgroundImage=`url("../img/background${y}.jpg ")`
+        board.style.visibility='visible';
+        board.style.left='1300px';
+        board.innerText='End';
+        board.style.alignItems='flex-start';
+        board.style.paddingTop='70px'
+    }
+    if (y<5){
+        board.style.visibility='hidden';
+        bodyElm.style.backgroundImage=`url("../img/background${y}.jpg ")`;
+    }
+}
+
+function gameOver(){
+    document.body.removeChild(boy);
+}
+
+actionStart();
+
+function actionStart(){
+    const imgStart = document.createElement('div');
+    imgStart.classList.add('start-image');
+    document.body.append(imgStart);
+    const btnStart = document.createElement('div');
+    btnStart.classList.add('btn-start');
+    document.body.append(btnStart);
+    btnStart.innerText= 'START';
+    btnStart.addEventListener('mouseenter',()=>btnStart.style.opacity='0.8')
+    btnStart.addEventListener('mouseleave',()=>btnStart.style.opacity='1')
+    btnStart.addEventListener('click',()=>{
+        document.body.removeChild(imgStart);
+        document.body.removeChild(btnStart);
+        gameStart();
+
+    });
+}
+

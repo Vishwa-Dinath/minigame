@@ -18,6 +18,7 @@ body{
     bottom: 100px;
     background-size: cover;
     background-position: center;
+    z-index: 2;
 }
 
 .enemy{
@@ -30,6 +31,7 @@ body{
     transform: scaleX(-1);
     /* background-color: yellow; */
     background-repeat: no-repeat;
+    z-index: 2;
 }
 
 .fire-ball{
@@ -50,10 +52,52 @@ footer{
     bottom: 0;
 }
 
-/* .test{
-    width: 100px;
-    height: 200px;
-    background-color: yellow;
+.start{
+    width: 300px;
+    height: 300px;
+    /* background-color: yellow; */
     position: absolute;
-    top: 648px;
-} */
+    background-image: url('../img/other/start-board.png');
+    background-position: center;
+    background-size: cover;
+    bottom: 100px;
+    left: 150px;
+    font-size: 60px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-left: 30px;
+    color: white;
+}
+
+.start-image{
+    width: 1000px;
+    height: 600px;
+    position: relative;
+    margin: auto;
+    transform: translateY(20%);
+    background-image: url("../img/other/START-GAME.png");
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    opacity: 0.9;
+}
+.btn-start{
+    width: 120px;
+    height: 60px;
+    background-color: red;
+    position: absolute;
+    border-radius: 10px;
+    bottom: 250px;
+    right: 470px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+    
+
