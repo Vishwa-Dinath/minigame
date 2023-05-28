@@ -43,7 +43,8 @@ function gameStart(){
 
     setEnemyWalk();
     setTimeout(()=>enableAttacking(),100)
-    
+    showScoreBoard();
+    setInterval(()=>setScore(),10)
 }
 
 let angle = 0;
@@ -158,15 +159,18 @@ function enemyDrawWalk(element){
     if (m===6) m=1;
 }
 
+let intervalEnemy=null;
+const arrayEnemyInterval = [];
 function setEnemyWalk(){
     for(let i=0;i<enemies.length;i++){
-        setInterval(()=>{
+        intervalEnemy = setInterval(()=>{
             if (innerWidth-enemies[i].x <= boy.offsetLeft+boy.offsetWidth && boy.offsetTop>=innerHeight-300){
                 boyDie();
             };
             if (enemies[i].walking) enemies[i].walk();
             
         },20);
+        arrayEnemyInterval.push(intervalEnemy);
         setInterval(()=>{
             if(!enemies[i].die)enemyDrawWalk(enemies[i]);
         },1000/8);
@@ -194,11 +198,13 @@ function enableAttacking(){
 }
 
 function boyDie(){
+    arrayEnemyInterval.forEach(intvl=>clearInterval(intvl));
     die = true;
     jump = false;
     run = false;
     enemies.forEach(each=>each.elm.style.visibility='hidden');
-    document.body.removeEventListener('click');
+    actionEnd();
+    // document.body.removeEventListener('click');
 }
 
 setInterval(()=>{
@@ -212,8 +218,8 @@ function attack(){
                 if (!fireBalls[r].dissapear){
                     fireBalls[r].dissapear=true;
                     document.body.removeChild(fireBalls[r].elm);
-                    // enemies[q].x=-800;
                     enemies[q].die = true;
+                    score +=5;
                     enemyDie(enemies[q]);
                     enemies[q].xSpeed = 0;
                     setTimeout(()=>{
@@ -236,6 +242,19 @@ function enemyDie(enemy){
     },100)
 }
 
+/*  Set scoring */
+let scoreBoard = null;
+function showScoreBoard(){
+    scoreBoard = document.createElement('div');
+    scoreBoard.classList.add('score');
+    document.body.append(scoreBoard);
+}
+function setScore(){
+    scoreBoard.innerText = `Score : ${score}`;
+}
+
+
+
 /* Design Surrounding */
 const board = document.createElement('div');
 board.classList.add('start');
@@ -243,7 +262,7 @@ document.body.append(board);
 board.innerText='Start'
 
 function setBackground(y){
-    if (y===6) gameOver();
+    if (y===6) gameWon();
     if (y==5) {
         board.style.backgroundImage="url('../img/other/end-board.png'";
         bodyElm.style.backgroundImage=`url("../img/background${y}.jpg ")`
@@ -259,8 +278,27 @@ function setBackground(y){
     }
 }
 
-function gameOver(){
+function gameWon(){
     document.body.removeChild(boy);
+    const imgWon = document.createElement('div');
+    imgWon.classList.add('restart');
+    document.body.append(imgWon);
+    imgWon.style.backgroundImage='url("../img/other/WON-GAME.png")';
+    const btnReplay = document.createElement('div');
+    btnReplay.classList.add('btn-restart');
+    document.body.append(btnReplay);
+    const scoreView = document.createElement('div');
+    scoreView.classList.add('score-view');
+    document.body.append(scoreView);
+    scoreView.style.top='600px'
+    scoreView.innerText= `Score : ${score}`;
+    btnReplay.innerText= 'REPLAY';
+    btnReplay.addEventListener('mouseenter',()=>btnReplay.style.opacity='0.8')
+    btnReplay.addEventListener('mouseleave',()=>btnReplay.style.opacity='1')
+    btnReplay.addEventListener('click',()=>{
+        window.location.href = "http://127.0.0.1:8080/";
+
+    });
 }
 
 actionStart();
@@ -279,6 +317,26 @@ function actionStart(){
         document.body.removeChild(imgStart);
         document.body.removeChild(btnStart);
         gameStart();
+
+    });
+}
+
+function actionEnd(){
+    const imgRestart = document.createElement('div');
+    imgRestart.classList.add('restart');
+    document.body.append(imgRestart);
+    const btnRestart = document.createElement('div');
+    btnRestart.classList.add('btn-restart');
+    document.body.append(btnRestart);
+    const scoreView = document.createElement('div');
+    scoreView.classList.add('score-view');
+    document.body.append(scoreView);
+    scoreView.innerText= `Score : ${score}`;
+    btnRestart.innerText= 'RESTART';
+    btnRestart.addEventListener('mouseenter',()=>btnRestart.style.opacity='0.8')
+    btnRestart.addEventListener('mouseleave',()=>btnRestart.style.opacity='1')
+    btnRestart.addEventListener('click',()=>{
+        window.location.href = "http://127.0.0.1:8080/";
 
     });
 }

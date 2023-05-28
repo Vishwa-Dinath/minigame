@@ -99,5 +99,66 @@ footer{
     cursor: pointer;
 }
 
+.score{
+    width: 250px;
+    height: 100px;
+    background-image: linear-gradient(rgb(18, 80, 18), rgb(29, 22, 22));
+    border-radius: 10px;
+    margin-top: 10px;
+    margin-left: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 40px;
+    color: white;
+    z-index: 2;
+}
+
+.score-view{
+    width: 250px;
+    height: 80px;
+    background-color: rgb(24, 146, 13);
+    border-radius: 10px;
+    position: absolute;
+    left: 1000px;
+    top: 620px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 40px;
+    color: white;
+    z-index: 10;
+}
+
+.restart{
+    width: 60vw;
+    height: 80vh;
+    position: absolute;
+    margin: auto;
+    left: 380px;
+    background-image: url("../img/other/END-GAME.png");
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    opacity: 0.9;
+    z-index: 2;
+}
+.btn-restart{
+    width: 120px;
+    height: 60px;
+    background-color: red;
+    position: absolute;
+    border-radius: 10px;
+    bottom: 150px;
+    right: 740px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    z-index: 3;
+}
+
     
 
