@@ -50,7 +50,7 @@ function gameStart(){
 let angle = 0;
 function doJump(){
     let y  = Math.cos(angle * (Math.PI / 180));
-    y *= 5;
+    y *= 6;
     boy.style.top = (boy.offsetTop - y) + "px";
     angle++;
     if (angle >  180){
@@ -62,7 +62,7 @@ function doJump(){
 let y =1;
 function doRun(){
     let x = boy.offsetLeft + dx;
-    if ((x)>= innerWidth) {
+    if ((x)>= innerWidth-20) {
         x = 0;
         y++;
         setBackground(y)
@@ -159,12 +159,20 @@ function enemyDrawWalk(element){
     if (m===6) m=1;
 }
 
+console.log(boy.getBoundingClientRect());
+
 let intervalEnemy=null;
 const arrayEnemyInterval = [];
 function setEnemyWalk(){
     for(let i=0;i<enemies.length;i++){
         intervalEnemy = setInterval(()=>{
-            if (innerWidth-enemies[i].x <= boy.offsetLeft+boy.offsetWidth && boy.offsetTop>=innerHeight-300){
+            // if ((innerWidth-enemies[i].x <= boy.offsetLeft+boy.offsetWidth) && boy.offsetTop>=innerHeight-300){
+            //     boyDie();
+            // };
+            let rect1=enemies[i].elm.getBoundingClientRect();
+            let rect2=boy.getBoundingClientRect();
+            if (rect1.x < rect2.x + rect2.width-20 &&
+                rect1.x + rect1.width-20 > rect2.x && boy.offsetTop>=innerHeight-300){
                 boyDie();
             };
             if (enemies[i].walking) enemies[i].walk();
@@ -192,7 +200,7 @@ function enableAttacking(){
         let b1= new FireBall(boy.offsetLeft+boy.offsetWidth);
         fireBalls.push(b1);
         setInterval(()=>{
-            b1.shoot();
+            if (!die) b1.shoot();
         },5);
     })
 }
@@ -219,7 +227,7 @@ function attack(){
                     fireBalls[r].dissapear=true;
                     document.body.removeChild(fireBalls[r].elm);
                     enemies[q].die = true;
-                    score +=5;
+                    if (!die) score +=5;
                     enemyDie(enemies[q]);
                     enemies[q].xSpeed = 0;
                     setTimeout(()=>{
@@ -308,7 +316,7 @@ function actionStart(){
     imgStart.classList.add('start-image');
     document.body.append(imgStart);
     const btnStart = document.createElement('div');
-    btnStart.classList.add('btn-start');
+    btnStart.classList.add('btn-start','animate__animated','animate__pulse','animate__infinite');
     document.body.append(btnStart);
     btnStart.innerText= 'START';
     btnStart.addEventListener('mouseenter',()=>btnStart.style.opacity='0.8')
@@ -341,3 +349,8 @@ function actionEnd(){
     });
 }
 
+let note = new Bird(100,150,false);
+note.elm.classList.add('note');
+note.elm.style.width='150px'
+note.xSpeed=2;
+setInterval(()=>note.fly(),20)

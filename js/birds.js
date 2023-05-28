@@ -20,7 +20,7 @@ class Bird{
         if (this.x>=innerWidth+200 && this.forward){
             this.x=0;
         }
-        if (this.x<=0 && !this.forward){
+        if (this.x<=-200 && !this.forward){
             this.x=innerWidth;
         }
         this.elm.style.left=`${this.x}px`
