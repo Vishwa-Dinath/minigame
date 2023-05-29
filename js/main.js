@@ -9,6 +9,8 @@ bodyElm.style.backgroundImage=`url("img/background1.jpg ")`;
 boy.classList.add('boy');
 document.body.append(boy);
 
+let audio = document.getElementById('game-audio');
+
 let jump = false;
 let run = false;
 let die = false;
@@ -44,7 +46,8 @@ function gameStart(){
     setEnemyWalk();
     setTimeout(()=>enableAttacking(),100)
     showScoreBoard();
-    setInterval(()=>setScore(),10)
+    setInterval(()=>setScore(),10);
+    audio.play();
 }
 
 let angle = 0;
@@ -217,7 +220,7 @@ function attack(){
                     fireBalls[r].dissapear=true;
                     document.body.removeChild(fireBalls[r].elm);
                     enemies[q].die = true;
-                    if (!die) score +=5;
+                    if (!die) score +=2;
                     enemyDie(enemies[q]);
                     enemies[q].xSpeed = 0;
                     setTimeout(()=>{
@@ -277,6 +280,7 @@ function setBackground(y){
 }
 
 function gameWon(){
+    audio.pause();
     document.body.removeChild(boy);
     const imgWon = document.createElement('div');
     imgWon.classList.add('restart');
@@ -305,8 +309,9 @@ function actionStart(){
     const imgStart = document.createElement('div');
     imgStart.classList.add('start-image');
     document.body.append(imgStart);
-    const btnStart = document.createElement('div');
-    btnStart.classList.add('btn-start','animate__animated','animate__pulse','animate__infinite');
+    let btnStart = document.createElement('div');
+    btnStart.classList.add('btn-start');
+    btnStart.classList.add('animate__animated','animate__pulse','animate__infinite');
     document.body.append(btnStart);
     btnStart.innerText= 'START';
     btnStart.addEventListener('mouseenter',()=>btnStart.style.opacity='0.8')
@@ -320,6 +325,7 @@ function actionStart(){
 }
 
 function actionEnd(){
+    audio.pause();
     const imgRestart = document.createElement('div');
     imgRestart.classList.add('restart');
     document.body.append(imgRestart);
@@ -335,6 +341,7 @@ function actionEnd(){
     btnRestart.addEventListener('mouseleave',()=>btnRestart.style.opacity='1')
     btnRestart.addEventListener('click',()=>{
         window.location.href = "https://vishwa-dinath.github.io/minigame/";
+        actionStart();
 
     });
 }
