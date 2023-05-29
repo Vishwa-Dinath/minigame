@@ -5,7 +5,7 @@ import { FireBall } from "./fire.js";
 
 const bodyElm = document.querySelector('body');
 const boy = document.createElement('div');
-bodyElm.style.backgroundImage=`url("../img/background1.jpg ")`;
+bodyElm.style.backgroundImage=`url("img/background1.jpg ")`;
 boy.classList.add('boy');
 document.body.append(boy);
 
@@ -80,32 +80,23 @@ setInterval(()=> {
 }, 5);
 
 let i = 1;
-// let i = 0;
 function drawIdle(){
-    boy.style.backgroundImage = `url('../img/1/Idle (${i++}).png')`;
-    // boxElm.style.backgroundImage = `url('img/2/Idle__00${i++}.png')`;
+    boy.style.backgroundImage = `url('img/1/Idle (${i++}).png')`;
     if(i === 10) i = 1;
-    // if(i === 9) i = 0;
 }
 let j=1
-// let j=0
 function drawRun(){
-    boy.style.backgroundImage = `url('../img/1/Run (${j++}).png')`;
-    // boxElm.style.backgroundImage = `url('img/2/Run__00${j++}.png')`;
+    boy.style.backgroundImage = `url('img/1/Run (${j++}).png')`;
     if (j===8) j=1;
-    // if (j===9) j=0;
 }
 let k=1
-// let k=0
 function drawJump(){
-    boy.style.backgroundImage = `url('../img/1/Jump (${k++}).png')`;
-    // boxElm.style.backgroundImage = `url('img/2/Jump__00${k++}.png')`;
+    boy.style.backgroundImage = `url('img/1/Jump (${k++}).png')`;
     if (k===12) k=1;
-    // if (k===9) k=0;
 }
 let p=1;
 function drawBoyDie(i){
-    boy.style.backgroundImage=`url('../img/1/Dead (${p++}).png')`;
+    boy.style.backgroundImage=`url('img/1/Dead (${p++}).png')`;
     if (p===10) p=9;
 }
 
@@ -134,7 +125,7 @@ birds.push(new Bird(60,40,true));
 
 let no=1;
 function drawFly(element){
-    element.elm.style.backgroundImage = `url('../img/${no++}.png')`;
+    element.elm.style.backgroundImage = `url('img/${no++}.png')`;
     element.elm.style.backgroundPosition='center'
     element.elm.style.backgroundSize='cover'
     if(no === 6) no = 1;
@@ -155,7 +146,7 @@ enemies.push(new Enemy(-600,3));
 
 let m=1;
 function enemyDrawWalk(element){
-    element.elm.style.backgroundImage=`url('../img/Zombie${element.image}/Walk${m++}.png')`;
+    element.elm.style.backgroundImage=`url('img/Zombie${element.image}/Walk${m++}.png')`;
     if (m===6) m=1;
 }
 
@@ -188,7 +179,7 @@ function setEnemyWalk(){
 
 let z=1;
 function drawEnemyDie(enemy){
-    enemy.elm.style.backgroundImage =`url('../img/Zombie${enemy.image}/Dead${z++}.png')`;
+    enemy.elm.style.backgroundImage =`url('img/Zombie${enemy.image}/Dead${z++}.png')`;
     if (z===8) z=6;
 }
 
@@ -212,7 +203,6 @@ function boyDie(){
     run = false;
     enemies.forEach(each=>each.elm.style.visibility='hidden');
     actionEnd();
-    // document.body.removeEventListener('click');
 }
 
 setInterval(()=>{
@@ -272,8 +262,8 @@ board.innerText='Start'
 function setBackground(y){
     if (y===6) gameWon();
     if (y==5) {
-        board.style.backgroundImage="url('../img/other/end-board.png'";
-        bodyElm.style.backgroundImage=`url("../img/background${y}.jpg ")`
+        board.style.backgroundImage="url('img/other/end-board.png'";
+        bodyElm.style.backgroundImage=`url("img/background${y}.jpg ")`
         board.style.visibility='visible';
         board.style.left='1300px';
         board.innerText='End';
@@ -282,7 +272,7 @@ function setBackground(y){
     }
     if (y<5){
         board.style.visibility='hidden';
-        bodyElm.style.backgroundImage=`url("../img/background${y}.jpg ")`;
+        bodyElm.style.backgroundImage=`url("img/background${y}.jpg ")`;
     }
 }
 
@@ -291,7 +281,7 @@ function gameWon(){
     const imgWon = document.createElement('div');
     imgWon.classList.add('restart');
     document.body.append(imgWon);
-    imgWon.style.backgroundImage='url("../img/other/WON-GAME.png")';
+    imgWon.style.backgroundImage='url("img/other/WON-GAME.png")';
     const btnReplay = document.createElement('div');
     btnReplay.classList.add('btn-restart');
     document.body.append(btnReplay);
@@ -304,7 +294,7 @@ function gameWon(){
     btnReplay.addEventListener('mouseenter',()=>btnReplay.style.opacity='0.8')
     btnReplay.addEventListener('mouseleave',()=>btnReplay.style.opacity='1')
     btnReplay.addEventListener('click',()=>{
-        window.location.href = "http://127.0.0.1:8080/";
+        window.location.href = "https://vishwa-dinath.github.io/minigame/";
 
     });
 }
