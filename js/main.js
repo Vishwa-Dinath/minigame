@@ -23,12 +23,17 @@ function gameStart(){
             jump = (!die)?true:false;  
         }else if (eventData.code === 'ArrowRight'){
             run = (!die)?true:false;
-            if(!die)boy.style.transform='scaleX(1)';
+            if(!die){
+                boy.style.transform='scaleX(1)';
+                score+=1;
+            };
             dx = 2;
         }else if (eventData.code === 'ArrowLeft'){
             run = (!die)?true:false;
-            console.log("turned");
-            if(!die) boy.style.transform='scaleX(-1)';
+            if(!die) {
+                boy.style.transform='scaleX(-1)';
+                score-=1;
+            };
             dx = -2;
         }
     });
@@ -61,14 +66,15 @@ function doJump(){
         angle = 0;  
     }
 }
-
 let y =1;
 function doRun(){
     let x = boy.offsetLeft + dx;
-    if ((x)>= innerWidth-20) {
-        x = 0;
+    if ((x)>= innerWidth-100 && y<5) {
+        x = 5;
         y++;
         setBackground(y)
+    }else if(x>=innerWidth-200 && y===5){
+        gameWon();
     }else if (x <= 0) x = 0;
     boy.style.left = `${x}px`;
 }
@@ -152,8 +158,6 @@ function enemyDrawWalk(element){
     element.elm.style.backgroundImage=`url('img/Zombie${element.image}/Walk${m++}.png')`;
     if (m===6) m=1;
 }
-
-console.log(boy.getBoundingClientRect());
 
 let intervalEnemy=null;
 const arrayEnemyInterval = [];
@@ -263,15 +267,15 @@ document.body.append(board);
 board.innerText='Start'
 
 function setBackground(y){
-    if (y===6) gameWon();
     if (y==5) {
+        showTreasure();
         board.style.backgroundImage="url('img/other/end-board.png'";
         bodyElm.style.backgroundImage=`url("img/background${y}.jpg ")`
         board.style.visibility='visible';
         board.style.left='1300px';
         board.innerText='End';
         board.style.alignItems='flex-start';
-        board.style.paddingTop='70px'
+        board.style.paddingTop='70px';
     }
     if (y<5){
         board.style.visibility='hidden';
@@ -279,9 +283,18 @@ function setBackground(y){
     }
 }
 
+
+let treasure;
+function showTreasure(){
+    treasure = document.createElement('div');
+    treasure.classList.add('treasure');
+    document.body.append(treasure);
+}
+
 function gameWon(){
     audio.pause();
     document.body.removeChild(boy);
+    enemies.forEach(each=>each.elm.style.display='none');
     const imgWon = document.createElement('div');
     imgWon.classList.add('restart');
     document.body.append(imgWon);

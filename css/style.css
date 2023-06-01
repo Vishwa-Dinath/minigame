@@ -35,13 +35,16 @@ body{
 }
 
 .fire-ball{
-    width: 50px;
+    width: 120px;
     height: 50px;
-    background-color: red;
+    /* background-color: red; */
     position: absolute;
     bottom: 150px;
-    border-radius: 100%;
-    background-image: linear-gradient(red,yellow);
+    /* border-radius: 100%; */
+    /* background-image: linear-gradient(red,yellow); */
+    background-image: url(../img/other/fireball.png);
+    background-position: center;
+    background-size: cover;
 }
 
 footer{
@@ -190,4 +193,13 @@ footer{
     top: 100%;
 }
     
-
+.treasure{
+    width: 200px;
+    height: 150px;
+    background-image: url(../img/other/treasure.png);
+    background-position: center;
+    background-size: cover;
+    position: absolute;
+    bottom: 100px;
+    right: 0;
+}
